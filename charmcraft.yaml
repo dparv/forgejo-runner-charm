@@ -1,0 +1,41 @@
+type: charm
+name: forgejo-runner
+title: Forgejo Runner Charm
+summary: A Juju charm for deploying Forgejo Runner Snap
+description: |
+  This Juju charm deploys and manages the Forgejo Runner Snap, providing
+  a scalable and reliable environment for running Forgejo CI/CD pipelines.
+
+  The charm handles installation, configuration, and lifecycle management
+  of the Forgejo Runner Snap, ensuring seamless integration with Forgejo
+  instances.
+base: ubuntu@24.04
+platforms:
+  amd64:
+
+parts:
+  forgejo-runner-charm:
+    source: .
+    plugin: uv
+    build-snaps:
+      - astral-uv
+
+actions:
+  register-runner:
+    description: Register the runner to a Forgejo server
+    params:
+      host:
+        type: string
+        description: The Forgejo server URL (e.g., https://forgejo.example.com)
+      secret:
+        type: string
+        description: |
+          The registration secret for the runner. Mind that this is NOT
+          as the token. This secret is obtained by running the forgejo-cli command
+          on the Forgejo server, as an example below:
+          `forgejo forgejo-cli actions register --secret $SECRET`
+          `forgejo forgejo-cli actions register --secret $SECRET --labels "docker"`
+    required:
+    - host
+    - secret
+
