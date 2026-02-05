@@ -32,7 +32,7 @@ class ForgejoRunnerCharmCharm(ops.CharmBase):
 
     def _on_start(self, event: ops.StartEvent):
         """Handle start event."""
-        self.unit.status = ops.ActiveStatus("Please run 'register-runner' action to register the runner")
+        self.unit.status = ops.BlockedStatus("forgejo-runner service not running; run 'register-runner' action to register the runner")
         version = forgejo_runner.get_version()
         if version is not None:
             self.unit.set_workload_version(version)
@@ -60,7 +60,7 @@ class ForgejoRunnerCharmCharm(ops.CharmBase):
     def _on_update_status(self, event: ops.UpdateStatusEvent):
         """Handle update-status event."""
         if not forgejo_runner.is_service_running():
-            self.unit.status = ops.BlockedStatus("forgejo-runner service not running")
+            self.unit.status = ops.BlockedStatus("forgejo-runner service not running; run 'register-runner' action to register the runner")
         else:
             host = forgejo_runner.get_host()
             self.unit.status = ops.ActiveStatus(f"runner registered at {host}")
