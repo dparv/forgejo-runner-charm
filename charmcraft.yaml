@@ -20,6 +20,12 @@ parts:
     build-snaps:
       - astral-uv
 
+charm-libs:
+  - lib: operator_libs_linux.systemd
+    version: "1"
+  - lib: operator_libs_linux.snap
+    version: "2"
+
 actions:
   register-runner:
     description: Register the runner to a Forgejo server
